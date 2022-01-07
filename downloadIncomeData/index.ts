@@ -17,24 +17,27 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     // wait for the login process to finish
     await page.waitForSelector("li.panel.processing")
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(2000)
 
     // move to "日次処理"
     await page.goto("https://www1.smaregi.jp/control/processing/")
+    await page.waitForSelector("a.btn-default.modal-btn.processing-edit")
     await page.waitForTimeout(2000)
 
     // click "日報"
     const dailyReportLocator = page.locator("a.btn-default.modal-btn.processing-edit").nth(0)
     await dailyReportLocator.click()
+    await page.waitForSelector("a.btn-print")
     await page.waitForTimeout(2000)
 
     await page.click("a.btn-print")
-    await page.waitForTimeout(1000)
+    await page.waitForSelector("div.btn-group ul.dropdown-menu li a")
+    await page.waitForTimeout(2000)
     const locator = page.locator("div.btn-group ul.dropdown-menu li a").nth(1)
     await locator.click()
+    await page.waitForSelector("#id_csv_download_button")
     await page.waitForTimeout(3000)
     
-    await page.waitForSelector("#id_csv_download_button")
     const [temp, download] = await Promise.all([
       await page.click("#id_csv_download_button"),
       await page.waitForEvent("download")

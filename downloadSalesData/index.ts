@@ -23,11 +23,12 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     // select today
     await page.waitForSelector('li[data-range-key="今日"]')
     await page.click('li[data-range-key="今日"]')
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(3000)
 
     // click search
     await page.click("input.btn-search")
-    await page.waitForTimeout(2000)
+    await page.waitForSelector("a.btn-file-dl")
+    await page.waitForTimeout(3000)
 
     const downloadButtonLocator = page.locator("a.btn-file-dl")
     // check if the button is disabled or not
